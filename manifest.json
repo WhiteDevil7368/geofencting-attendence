@@ -1,0 +1,16 @@
+{
+  "name": "DIGIM ATTENDENCE APP TESTING",
+  "short_name": "DIGIM ATTENDENCE",
+  "start_url": "/index.html",
+  "display": "standalone",
+  "background_color": "#4CAF50",   
+  "theme_color": "#1B5E20",        
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    }
+  ]
+}

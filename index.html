@@ -99,7 +99,7 @@
         // School coordinates
         const schoolLat = 17 + 41 / 60 + 39.8 / 3600; // 17.694389
         const schoolLon = 83 + 10 / 60 + 17.1 / 3600; // 83.171417
-        const allowedDistance = 0.2; // km
+        const allowedDistance = 0.5; // km
 
         // Calculate distance between two coordinates
         function getDistance(lat1, lon1, lat2, lon2) {
@@ -114,36 +114,41 @@
         }
 
         // Mark attendance
-        function markAttendance() {
-            if (!navigator.geolocation) { alert("Geolocation not supported"); return; }
+        // Mark attendance
+function markAttendance() {
+  if(!navigator.geolocation){ 
+    alert("Geolocation not supported"); 
+    return; 
+  }
 
-            navigator.geolocation.getCurrentPosition(position => {
-                const userLat = position.coords.latitude;
-                const userLon = position.coords.longitude;
-                const distance = getDistance(userLat, userLon, schoolLat, schoolLon);
+  navigator.geolocation.getCurrentPosition(position=>{
+    const userLat = position.coords.latitude;
+    const userLon = position.coords.longitude;
+    const distance = getDistance(userLat, userLon, schoolLat, schoolLon);
 
-                if (distance > allowedDistance) {
-                    alert("You are outside the school location ❌");
-                    return;
-                }
+    const today = new Date().toLocaleDateString();
+    const markedDate = localStorage.getItem("attendanceDate");
 
-                const today = new Date().toLocaleDateString();
-                const markedDate = localStorage.getItem("attendanceDate");
+    if(markedDate === today){ 
+      alert("Attendance already marked today ❌"); 
+      showStatus(); 
+      return; 
+    }
 
-                if (markedDate === today) {
-                    alert("Attendance already marked today ❌");
-                    showStatus();
-                    return;
-                }
+    if(distance > allowedDistance){ 
+      document.getElementById("status").innerText = 
+        `❌ You are outside the school location. You are ${distance.toFixed(2)} km away from the school.`;
+      return; 
+    }
 
-                const now = new Date().toLocaleTimeString();
-                localStorage.setItem("attendanceDate", today);
-                localStorage.setItem("attendanceTime", now);
+    const now = new Date().toLocaleTimeString();
+    localStorage.setItem("attendanceDate", today);
+    localStorage.setItem("attendanceTime", now);
 
-                alert("Attendance marked at " + now + " ✅");
-                showStatus();
-            });
-        }
+    alert("Attendance marked at "+now+" ✅");
+    showStatus();
+  });
+}
 
         // Logout function
         function logout() {
